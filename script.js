@@ -16,7 +16,10 @@ const moveSlider = () => {
     Array.from(navLabels).forEach(function (navLabel,index) {        
         navLabel.addEventListener('click', function () {
             navLabels[activeLabel]?.classList?.remove('selected');
-            navLabels[activeLabel]?.classList?.remove('underlined');
+            //Remove all underlines to prepare for rare case where user clicks faster than animations
+            Array.from(navLabels).forEach(function (navLabel) {
+                navLabel.classList.remove('underlined');
+            });
             //Unhide slider to begin sliding animation
             slider.classList.remove('hidden');
             slider.style.left = labelObject[navLabel.innerText].left;
@@ -38,7 +41,7 @@ window.onload = function () {
   };
 
   window.addEventListener("resize",debounce(function(){
-    createLabelObject();
+        createLabelObject();
   }));
   
   function debounce(func){
