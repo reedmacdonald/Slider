@@ -1,34 +1,47 @@
 
-let labelObject={}
-let activeLabel=-1;
+let spanObject={}
+let activespan=-1;
 let transitionTime = 500;
 
-const createLabelObject = () => {
-    const navLabels = document.querySelectorAll('label');
-    Array.from(navLabels).forEach(function (navLabel) {
-        labelObject[navLabel.innerText]={left:navLabel.offsetLeft+'px', width:navLabel.offsetWidth+'px'};
+const createspanObject = () => {
+    const navspans = document.querySelectorAll('span');
+    Array.from(navspans).forEach(function (navspan) {
+        spanObject[navspan.innerText]={left:navspan.offsetLeft+'px', width:navspan.offsetWidth+'px'};
     });
 };
+getTime = (diff) => {
+    let hours = new Date().getHours();
+    let minutes = new Date().getMinutes();
+    let hourFinal=hours+Number(diff);
+    if (hourFinal>24){
+        hourFinal=hourFinal-24;
+    }
+    document.querySelector('.hours').innerHTML = hourFinal;
+     document.querySelector('.minutes').innerHTML = minutes;
+
+}
 const moveSlider = () => {
-    const navLabels = document.querySelectorAll('label');
+    const navspans = document.querySelectorAll('span');
     const slider = document.querySelector('#slider');
     
-    Array.from(navLabels).forEach(function (navLabel,index) {        
-        navLabel.addEventListener('click', function () {
-            navLabels[activeLabel]?.classList?.remove('selected');
-            navLabels[activeLabel]?.classList?.remove('underlined');
+    Array.from(navspans).forEach(function (navspan,index) {        
+        navspan.addEventListener('click', function () {
+            navspans[activespan]?.classList?.remove('selected');
+            navspans[activespan]?.classList?.remove('underlined');
             //Unhide slider to begin sliding animation
             slider.classList.remove('hidden');
-            slider.style.left = labelObject[navLabel.innerText].left;
-            slider.style.width = labelObject[navLabel.innerText].width;
-            navLabel.classList.add('selected');
-            activeLabel=index;
+            slider.style.left = spanObject[navspan.innerText].left;
+            slider.style.width = spanObject[navspan.innerText].width;
+            navspan.classList.add('selected');
+            activespan=index;
+            const hourDif=navspan.dataset.timedif;
+            getTime(hourDif);
             setTimeout(() => {
                 //Remove all underlines to prepare for rare case where user clicks faster than animations
-                Array.from(navLabels).forEach(function (navLabel) {
-                    navLabel.classList.remove('underlined');
+                Array.from(navspans).forEach(function (navspan) {
+                    navspan.classList.remove('underlined');
                  });
-                navLabel.classList.add('underlined')
+                navspan.classList.add('underlined')
                 //Hide the slider once it has finished sliding for easier resizing
                 slider.classList.add('hidden');
             }, transitionTime);
@@ -37,13 +50,16 @@ const moveSlider = () => {
 };
 
 window.onload = function () {
-    createLabelObject();
-    moveSlider(labelObject);
+    createspanObject();
+    getTime(0);
+    moveSlider(spanObject);
   };
 
   window.addEventListener("resize",debounce(function(){
-        createLabelObject();
+        createspanObject();
   }));
+
+
   
   function debounce(func){
     var timer;
