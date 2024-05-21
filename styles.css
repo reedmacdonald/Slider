@@ -26,11 +26,11 @@ nav ul {
     position:absolute;
     top:100%;
     background-color: black;
-    height:1px;
     display:block;
     left:0px;
     transition-duration: .5s;
-    margin-top: -.5px;
+    margin-top: 0px;
+    height:0;
 }
 nav ul li {
     list-style-type:none;
